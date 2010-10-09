@@ -98,7 +98,7 @@ module Maestro
 
       # establishes a connection to Amazon
       def connect!
-        @ec2 = AWS::EC2::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true)
+        @ec2 = AWS::EC2::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true, :server => 'ec2.ap-southeast-1.amazonaws.com')
         @elb = AWS::ELB::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true)
         @rds = AWS::RDS::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true)
         s3_logger = Logger.new(STDOUT)
