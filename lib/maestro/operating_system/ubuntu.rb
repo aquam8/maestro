@@ -4,20 +4,44 @@ module Maestro
     class Ubuntu < Base
       def initialize(etc_issue_str)
         super(etc_issue_str)
-        @chef_install_script =
-          ["sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get update -y'",
-           "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get upgrade -y'",
-           "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get install -y ruby irb ri rdoc libyaml-ruby and libzlib-ruby build-essential libopenssl-ruby ruby1.8-dev wget'",
-           "sudo mkdir -p /usr/local/src",
-           "sudo wget -P /usr/local/src http://rubyforge.org/frs/download.php/69365/rubygems-1.3.6.tgz",
-           "sudo tar zxf /usr/local/src/rubygems-1.3.6.tgz -C /usr/local/src",
-           "sudo ruby /usr/local/src/rubygems-1.3.6/setup.rb",
-           "sudo rm /usr/local/src/rubygems-1.3.6.tgz",
-           "sudo ln -sfv /usr/bin/gem1.8 /usr/bin/gem",
-           "sudo gem sources -a http://gems.opscode.com",
-           "sudo gem install rake --no-rdoc --no-ri",
-           "sudo gem install chef --no-rdoc --no-ri --version '= 0.9.8'",
-           "sudo ln -sfv $(gem environment gemdir)/gems/chef-0.9.8/bin/chef-solo /usr/bin/chef-solo"]
+                rvm_sh = "[[ -s '/usr/local/lib/rvm' ]] && . '/usr/local/lib/rvm'"
+                # http://alestic.com/2009/11/ec2-karmic-desktop#comment-237
+                @chef_install_script =
+                  ["sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get update -y'",
+                   "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo -E apt-get upgrade -y'",
+                   "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get install -y git-core curl build-essential binutils-doc gcc autoconf flex bison libreadline5-dev zlib1g-dev libssl-dev libxml2-dev libxslt1-dev'",
+                   "sh -c 'bash < <( curl -L http://bit.ly/rvm-install-system-wide ) '",
+                   "sudo echo #{rvm_sh} > /etc/profile.d/rvm.sh",
+                   "sudo source /etc/profile",
+                   "rvm install ruby-1.9.2-p0",
+                   "rvm --default ruby-1.9.2-p0",
+                   "gem install ohai chef --no-rdoc --no-ri",
+        #           "sudo mkdir -p /usr/local/src",
+        #           "sudo wget -P /usr/local/src http://rubyforge.org/frs/download.php/69365/rubygems-1.3.6.tgz",
+        #           "sudo tar zxf /usr/local/src/rubygems-1.3.6.tgz -C /usr/local/src",
+        #           "sudo ruby /usr/local/src/rubygems-1.3.6/setup.rb",
+        #           "sudo rm /usr/local/src/rubygems-1.3.6.tgz",
+        #           "sudo ln -sfv /usr/bin/gem1.8 /usr/bin/gem",
+        #           "sudo gem sources -a http://gems.opscode.com",
+        #           "sudo gem install rake --no-rdoc --no-ri",
+        #           "sudo gem install chef --no-rdoc --no-ri --version '= 0.9.8'",
+                   "sudo ln -nfs $(which chef-client) /usr/bin/chef-client"
+        #           "sudo ln -sfv $(gem environment gemdir)/gems/chef-0.9.8/bin/chef-solo /usr/bin/chef-solo"
+                  ]
+        # @chef_install_script =
+        #   ["sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get update -y'",
+        #    "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get upgrade -y'",
+        #    "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get install -y ruby irb ri rdoc libyaml-ruby and libzlib-ruby build-essential libopenssl-ruby ruby1.8-dev wget'",
+        #    "sudo mkdir -p /usr/local/src",
+        #    "sudo wget -P /usr/local/src http://rubyforge.org/frs/download.php/69365/rubygems-1.3.6.tgz",
+        #    "sudo tar zxf /usr/local/src/rubygems-1.3.6.tgz -C /usr/local/src",
+        #    "sudo ruby /usr/local/src/rubygems-1.3.6/setup.rb",
+        #    "sudo rm /usr/local/src/rubygems-1.3.6.tgz",
+        #    "sudo ln -sfv /usr/bin/gem1.8 /usr/bin/gem",
+        #    "sudo gem sources -a http://gems.opscode.com",
+        #    "sudo gem install rake --no-rdoc --no-ri",
+        #    "sudo gem install chef --no-rdoc --no-ri --version '= 0.9.8'",
+        #    "sudo ln -sfv $(gem environment gemdir)/gems/chef-0.9.8/bin/chef-solo /usr/bin/chef-solo"]
       end
     end
 
@@ -25,21 +49,6 @@ module Maestro
     class Ubuntu1004 < Ubuntu
       def initialize(etc_issue_str)
         super(etc_issue_str)
-        # http://alestic.com/2009/11/ec2-karmic-desktop#comment-237
-        @chef_install_script =
-          ["sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get update -y'",
-           "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo -E apt-get upgrade -y'",
-           "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get install -y ruby irb ri rdoc libyaml-ruby and libzlib-ruby build-essential libopenssl-ruby ruby1.8-dev wget'",
-           "sudo mkdir -p /usr/local/src",
-           "sudo wget -P /usr/local/src http://rubyforge.org/frs/download.php/69365/rubygems-1.3.6.tgz",
-           "sudo tar zxf /usr/local/src/rubygems-1.3.6.tgz -C /usr/local/src",
-           "sudo ruby /usr/local/src/rubygems-1.3.6/setup.rb",
-           "sudo rm /usr/local/src/rubygems-1.3.6.tgz",
-           "sudo ln -sfv /usr/bin/gem1.8 /usr/bin/gem",
-           "sudo gem sources -a http://gems.opscode.com",
-           "sudo gem install rake --no-rdoc --no-ri",
-           "sudo gem install chef --no-rdoc --no-ri --version '= 0.9.8'",
-           "sudo ln -sfv $(gem environment gemdir)/gems/chef-0.9.8/bin/chef-solo /usr/bin/chef-solo"]
       end
     end
 
