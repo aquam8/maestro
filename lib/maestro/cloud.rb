@@ -119,6 +119,7 @@ module Maestro
             session.close
             session = open_ssh_session(result[1])
             install_chef_solo(session)
+            @logger.progress "Configuring chef-solo on Nodes #{names.inspect}. This may take a few minutes..."
             configure_chef_solo(session)
             session.close
             @logger.progress "\n"
@@ -154,7 +155,7 @@ module Maestro
             @logger.error "Could not find node matching hostname #{channel[:host]}. This should not happen."
           else
             channel.request_pty {|ch, success| abort "could not obtain pty" if !success}
-            channel.exec("chef-solo --version") do |ch, success|
+            channel.exec("sudo -i chef-solo --version") do |ch, success|
               ch.on_data do |ch, data|
                 if !data.include?("Chef: 0.9")
                   valid = false
@@ -262,7 +263,7 @@ module Maestro
         end
         # run chef-solo
         chef_solo_commands = 
-           ["sudo chef-solo -l debug -c /tmp/chef-solo.rb -r '#{chef_assets_url()}'"]
+           ["sudo -i chef-solo -l debug -c /tmp/chef-solo.rb -r '#{chef_assets_url()}'"]
         chef_solo_commands.each do |cmd|
           session.open_channel do |channel|
             channel.request_pty {|ch, success| abort "could not obtain pty" if !success}
