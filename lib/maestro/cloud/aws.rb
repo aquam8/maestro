@@ -41,7 +41,7 @@ module Maestro
       attr_reader :elb_nodes
       # Hash of Rds Nodes
       attr_reader :rds_nodes
-      dsl_property :aws_account_id, :aws_access_key, :aws_secret_access_key, :chef_bucket
+      dsl_property :aws_account_id, :aws_access_key, :aws_secret_access_key, :chef_bucket, :region
 
       def initialize(name, cfg_file=nil, &block)
         @ec2_nodes = Hash.new
@@ -98,9 +98,9 @@ module Maestro
 
       # establishes a connection to Amazon
       def connect!
-        @ec2 = AWS::EC2::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true, :server => 'ec2.ap-southeast-1.amazonaws.com')
-        @elb = AWS::ELB::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true)
-        @rds = AWS::RDS::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true)
+        @ec2 = AWS::EC2::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true, :server => "ec2.#{region}.amazonaws.com")
+        @elb = AWS::ELB::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true, :server => "elasticloadbalancing.#{region}.amazonaws.com")
+        @rds = AWS::RDS::Base.new(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true, :server => "rds.#{region}.amazonaws.com")
         s3_logger = Logger.new(STDOUT)
         s3_logger.level = Logger::FATAL
         AWS::S3::Base.establish_connection!(:access_key_id => aws_access_key, :secret_access_key => aws_secret_access_key, :use_ssl => true)
