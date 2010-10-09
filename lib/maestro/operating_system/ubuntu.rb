@@ -10,7 +10,7 @@ module Maestro
                   ["sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get update -y'",
                    "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo -E apt-get upgrade -y'",
                    "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get install -y git-core curl build-essential binutils-doc gcc autoconf flex bison libreadline5-dev zlib1g-dev libssl-dev libxml2-dev libxslt1-dev'",
-                   "sh -c 'bash < <( curl -L http://bit.ly/rvm-install-system-wide ) '",
+                   "bash < <( curl -L http://bit.ly/rvm-install-system-wide )",
                    "sudo echo #{rvm_sh} > /etc/profile.d/rvm.sh",
                    "sudo source /etc/profile",
                    "rvm install ruby-1.9.2-p0",
