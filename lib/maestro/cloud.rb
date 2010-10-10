@@ -262,8 +262,10 @@ module Maestro
           session.loop(60)
         end
         # run chef-solo
+        @logger.error "Starting chef-solo process ..."
+        
         chef_solo_commands = 
-           ["sudo -i chef-solo -l debug -c /tmp/chef-solo.rb -r '#{chef_assets_url()}'"]
+           ["rvm default && chef-solo -l debug -c /tmp/chef-solo.rb -r '#{chef_assets_url()}'"]
         chef_solo_commands.each do |cmd|
           session.open_channel do |channel|
             channel.request_pty {|ch, success| abort "could not obtain pty" if !success}
