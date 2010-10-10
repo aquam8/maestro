@@ -6,7 +6,9 @@ module Maestro
         super(etc_issue_str)
           ruby_version = "ruby-1.9.2-p0"
           rvm_sh = "[[ -s '/usr/local/lib/rvm' ]] && . '/usr/local/lib/rvm'"
-          #rvm_ruby_bin = "/usr/local/rvm/rubies/ruby-1.9.2-p0/bin/gem"
+          #rvm_ruby_bin = "/usr/local/rvm/rubies/#{ruby_version}/bin/gem"
+          rvm_gem_bin = "/usr/local/rvm/gems/#{ruby_version}/bin/"
+          
           # http://alestic.com/2009/11/ec2-karmic-desktop#comment-237
           @chef_install_script = [
             "sh -c 'export DEBIAN_FRONTEND=noninteractive; sudo apt-get update -y'",
@@ -15,8 +17,8 @@ module Maestro
             "bash < <( curl -L http://bit.ly/rvm-install-system-wide )",
             "sudo echo '#{rvm_sh}' > /etc/profile.d/rvm.sh",
             "rvm install #{ruby_version} && rvm --default #{ruby_version}",
-            "source /etc/profile && gem install ohai chef --no-rdoc --no-ri"
-          # "sudo ln -sfv #{rvm_ruby_bin}/chef-solo /usr/bin/chef-solo"
+            "source /etc/profile && gem install ohai chef --no-rdoc --no-ri",
+            "sudo ln -nsv #{rvm_gem_bin}/chef-solo /usr/bin/chef-solo"
         #   "sudo ln -sfv $(gem environment gemdir)/gems/chef-0.9.8/bin/chef-solo /usr/bin/chef-solo"
         ]
         
