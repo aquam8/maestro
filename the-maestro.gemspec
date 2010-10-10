@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Brian Ploetz"]
-  s.date = %q{2010-10-05}
+  s.date = %q{2010-10-10}
   s.description = %q{Maestro is a cloud provisioning, configuration, and management utility for your Ruby and Ruby On Rails applications.}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
      "lib/maestro/operating_system/debian.rb",
      "lib/maestro/operating_system/fedora.rb",
      "lib/maestro/operating_system/ubuntu.rb",
+     "lib/maestro/railtie.rb",
      "lib/maestro/role.rb",
      "lib/maestro/tasks.rb",
      "lib/maestro/validator.rb",

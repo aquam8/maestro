@@ -262,7 +262,7 @@ module Maestro
           session.loop(60)
         end
         # run chef-solo
-        @logger.error "Starting chef-solo process ..."
+        @logger.error "Starting chef-solo process (bis)..."
         
         chef_solo_commands = 
            ["rvm default && sudo -s chef-solo -l debug -c /tmp/chef-solo.rb -r '#{chef_assets_url()}'"]
